@@ -1,51 +1,80 @@
 import 'package:flutter/material.dart';
 
-class GenreList extends StatefulWidget {
-  const GenreList({super.key});
-
-  @override
-  State<GenreList> createState() => _GenreListState();
-}
-
-class _GenreListState extends State<GenreList> {
-  int selectedIndex = 0;
-  final List<String> genres = [
-    'All',
-    'Action',
-    'Adventure',
-    'Fantasy',
-    'Drama',
-    'Sci-Fi'
+class GenreList extends StatelessWidget {
+  final List<String> genres = const [
+    "All",
+    "Action",
+    "Adventure",
+    "Comedy",
+    "Drama",
+    "Fantasy",
+    "Horror",
+    "Mystery",
+    "Romance",
+    "Sci-Fi",
+    "Slice of Life",
   ];
+
+  final String selected;
+  final ValueChanged<String>? onGenreSelected;
+
+  const GenreList({
+    super.key,
+    this.selected = "All",
+    this.onGenreSelected,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 40,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: genres.length,
-        itemBuilder: (context, index) {
-          final isSelected = selectedIndex == index;
-          return GestureDetector(
-            onTap: () => setState(() => selectedIndex = index),
-            child: Container(
-              margin: const EdgeInsets.only(right: 12),
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-              decoration: BoxDecoration(
-                color: isSelected ? Colors.deepPurpleAccent : Colors.white10,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Text(
-                genres[index],
-                style: TextStyle(
-                  color: isSelected ? Colors.white : Colors.grey,
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      padding: EdgeInsets.symmetric(
+        horizontal: screenWidth * 0.04,
+        vertical: screenHeight * 0.01,
+      ),
+      child: Row(
+        children: genres.map((genre) {
+          final isActive = genre == selected;
+
+          return Padding(
+            padding: EdgeInsets.only(right: screenWidth * 0.06),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(screenWidth * 0.06),
+              onTap: () {
+                // TODO: Update the selected genre and filter the anime list accordingly
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: screenWidth * 0.06,
+                  vertical: screenHeight * 0.01,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(screenWidth * 0.06),
+                  color: const Color(0xFF0b395e),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.3),
+                      blurRadius: screenWidth * 0.02,
+                      offset: Offset(0, screenHeight * 0.005),
+                    ),
+                  ],
+                ),
+                child: Text(
+                  genre,
+                  style: TextStyle(
+                    fontSize: screenWidth * 0.04,
+                    color: isActive ? Colors.white : Colors.grey.shade600,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
             ),
           );
-        },
+        }).toList(),
+
       ),
     );
   }
